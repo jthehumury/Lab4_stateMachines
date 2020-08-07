@@ -12,7 +12,7 @@
 #include "simAVRHeader.h"
 #endif
 
-enum State{Init, wait, incPress, incButtonHold, incRelease, decPress, decButtonHold, decRelease, pressOff, reset} state;
+enum State{Init, wait, incButtonHold, decButtonHold, reset} state;
 
 void tick() {
     unsigned char inc=PINA&0x01;
@@ -28,82 +28,43 @@ void tick() {
 		state=wait;
 	    }
 	    else if (inc&&!dec) {
-	        state=incPress;
+		if (val<9) {
+                val++;
+                }
+	        state=incButtonHold;
 	    }
 	    else if (!inc&&dec) {
-		state=decPress;
+		if (val>0) {
+                    val--;
+                }
+		state=decButtonHold;
 	    }
 	    else if (inc&&dec) {
 		state=reset;
 	    }
-	    break;
-	case incPress:
-            if (val<9) {
-                val++;
-            }
-	    state=incButtonHold;
 	    break;
 	case incButtonHold:
 	    if (inc&&!dec) {
 		state=incButtonHold;
 	    }
 	    else if (!inc&&!dec) {
-		state=incRelease;
+		state=wait;
 	    }
 	    else if (dec) {
 		state=reset;	    
 	    }
-	    break;
-	case incRelease:
-	    if (!inc&&!dec) {
-		state=incRelease;
-	    }
-	    else if (inc&&!dec) {
-		state=pressOff;
-	    }
-	    else if (dec) {
-		state=reset;
-	    }
-	    break;
-	case decPress:
-	    if (val>0) {
-                val--;
-            }
-	    state=decButtonHold;
 	    break;
 	case decButtonHold:
             if (!inc&&dec) {
                 state=decButtonHold;
             }
             else if (!inc&&!dec) {
-                state=decRelease;
-            }
-            else if (inc) {
-                state=reset;
-            }
-            break;
-        case decRelease:
-            if (!inc&&!dec) {
-                state=decRelease;
-            }
-            else if (!inc&&dec) {
-                state=pressOff;
+                state=wait;
             }
             else if (inc) {
                 state=reset;
             }
 	    break;
-	case pressOff:
-	    if (inc&&dec) {
-		state=reset;
-	    }
-	    else if (inc||dec) {
-		state=pressOff;
-	    }
-	    else {
-		state=wait;
-	    }
-	    break; 
 	case reset:
 	    val=0x00;
 	    state=wait;

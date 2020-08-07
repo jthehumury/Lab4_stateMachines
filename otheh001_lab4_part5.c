@@ -79,7 +79,12 @@ void tick() {
             }
 	    break;
         case idleUnlock:
-	    if (sequence==0x00) {
+	    if (!x&&!y&&!hash&&lock) {
+		sequence=0x00;
+		lockStatus=0x00;
+		lockState=lockDoor;
+	    }
+	    else if (sequence==0x00) {
                 if (!x&&!y&&hash&&!lock) {
                     button=PINA;
                     lockState=holdButton;
@@ -142,7 +147,6 @@ void tick() {
 	    break;
 	case lockDoor:
      	    lockState=(!x&&!y&&!hash&&lock)?lockDoor:idleLock;
-	    lockStatus=0x00;
 	    break;
 	default:
 	    lockState=Init;

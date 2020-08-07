@@ -20,6 +20,7 @@ void tick() {
     switch (ledState) { //Transitions
 	case Init:
 	    ledState=buttonReleaseLed1;
+	    leds=0x01;
 	    break;
 	case buttonReleaseLed1:
 	    ledState=button?buttonPressLed2:buttonReleaseLed1;
@@ -34,9 +35,6 @@ void tick() {
 	    ledState=Init;
     }
     switch (ledState) { //Actions
-	case buttonReleaseLed1:
-	    leds=0x01;
-	    break;
 	case buttonPressLed2:
 	    leds=0x02;
 	    break;
