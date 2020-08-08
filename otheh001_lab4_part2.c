@@ -12,7 +12,7 @@
 #include "simAVRHeader.h"
 #endif
 
-enum State{Init, wait, incButtonHold, decButtonHold, reset} state;
+enum State{Init, idle, incButtonHold, decButtonHold, reset} state;
 
 void tick() {
     unsigned char inc=PINA&0x01;
@@ -20,12 +20,12 @@ void tick() {
     static unsigned char val;
     switch (state) {
 	case Init:
-	    state=wait;
+	    state=idle;
 	    val=0x07;
 	    break;
 	case wait:
 	    if (!inc&&!dec) {
-		state=wait;
+		state=idle;
 	    }
 	    else if (inc&&!dec) {
 		if (val<9) {
@@ -48,7 +48,7 @@ void tick() {
 		state=incButtonHold;
 	    }
 	    else if (!inc&&!dec) {
-		state=wait;
+		state=idle;
 	    }
 	    else if (dec) {
 		state=reset;	    
@@ -59,7 +59,7 @@ void tick() {
                 state=decButtonHold;
             }
             else if (!inc&&!dec) {
-                state=wait;
+                state=idle;
             }
             else if (inc) {
                 state=reset;
@@ -67,7 +67,7 @@ void tick() {
 	    break;
 	case reset:
 	    val=0x00;
-	    state=wait;
+	    state=idle;
 	    break;
 	default:
 	    state=Init;
