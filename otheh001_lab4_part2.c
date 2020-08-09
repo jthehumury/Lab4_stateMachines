@@ -23,7 +23,7 @@ void tick() {
 	    state=idle;
 	    val=0x07;
 	    break;
-	case wait:
+	case idle:
 	    if (!inc&&!dec) {
 		state=idle;
 	    }
