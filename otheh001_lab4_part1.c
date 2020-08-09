@@ -31,15 +31,18 @@ void tick() {
 	case buttonReleaseLed2:
 	    ledState=button?buttonPressLed1:buttonReleaseLed2;
 	    break;
+	case buttonPressLed1:
+	    ledState=button?buttonPressLed1:buttonReleaseLed1;
+	    break;
 	default:
 	    ledState=Init;
     }
     switch (ledState) { //Actions
-	case buttonPressLed2:
-	    leds=0x02;
-	    break;
 	case buttonPressLed1:
 	    leds=0x01;
+	    break;
+	case buttonPressLed2:
+	    leds=0x02;
     }
     PORTB=leds;
 }
