@@ -75,7 +75,7 @@ int main(void) {
     DDRA=0x00; PORTA=0xFF;
     DDRC=0xFF; PORTC=0x00;
     /* Insert your solution below */
-    state=Init;
+    state=idle;
     while (1) {
 	tick();
     }
