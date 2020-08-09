@@ -12,17 +12,14 @@
 #include "simAVRHeader.h"
 #endif
 
-enum LedState{Init, buttonReleaseLed1, buttonPressLed2, buttonReleaseLed2, buttonPressLed1} ledState;
+enum LedState{buttonReleaseLed1, buttonPressLed2, buttonReleaseLed2, buttonPressLed1} ledState;
 
 void tick() {
     unsigned char button=PINA&0x01;
     static unsigned char leds;
     switch (ledState) { //Transitions
-	case Init:
-	    ledState=buttonReleaseLed1;
-	    leds=0x01;
-	    break;
 	case buttonReleaseLed1:
+	    leds=0x01;
 	    ledState=button?buttonPressLed2:buttonReleaseLed1;
 	    break;
 	case buttonPressLed2:
@@ -35,7 +32,7 @@ void tick() {
 	    ledState=button?buttonPressLed1:buttonReleaseLed1;
 	    break;
 	default:
-	    ledState=Init;
+	    ledState=buttonReleaseLed1;
     }
     switch (ledState) { //Actions
 	case buttonPressLed1:

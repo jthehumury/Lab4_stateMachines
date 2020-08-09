@@ -12,17 +12,13 @@
 #include "simAVRHeader.h"
 #endif
 
-enum State{Init, idle, incButtonHold, decButtonHold} state;
+enum State{idle, incButtonHold, decButtonHold} state;
 
 void tick() {
     unsigned char inc=PINA&0x01;
     unsigned char dec=(PINA&0x02)>>1;
-    static unsigned char val;
+    static unsigned char val=0x07;
     switch (state) {
-	case Init:
-	    state=idle;
-	    val=0x07;
-	    break;
 	case idle:
 	    if (!inc&&!dec) {
 		state=idle;
@@ -69,7 +65,7 @@ void tick() {
             }
 	    break;
 	default:
-	    state=Init;
+	    state=idle;
     }
     PORTC=val;
 }
